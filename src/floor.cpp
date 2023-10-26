@@ -21,10 +21,10 @@ bool Floor::hit(class Ray &ray) const
     return false;
   }
 
-  bool xOffset = (hitPoint.x < 0); //  this is used to remove a unstaggered row on the place where the x coördinate goes below 0
-  bool zOffset = (hitPoint.z < 0); //  this is used to remove a unstaggered row on the place where the z coördinate goes below 0
+  bool xOffset = (hitPoint.x < 0); //  this is used to remove a duplicate row on the place where the x coordinate goes below 0
+  bool zOffset = (hitPoint.z < 0); //  this is used to remove a duplicate row on the place where the z coordinate goes below 0
 
-  //  calculates which what square the ray hits counted from the middle. if the X and Z coörniates of that square are either both even or both uneven this will return true
+  //  calculates which what square the ray hits counted from the middle. if the X and Z coordinates of that square are either both even or both uneven this will return true
   return (int)(abs(hitPoint.x - xOffset * checkerDistance) / checkerDistance) % 2 == (int)((abs(hitPoint.z - zOffset * checkerDistance)) / checkerDistance) % 2;
 }
 

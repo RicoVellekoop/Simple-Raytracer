@@ -54,7 +54,7 @@ bool Sphere::hit(class Ray &ray) const
 Vec3D Sphere::hitPoint(class Ray &ray) const
 {
   /*
-    The hitpoint is calculated by taking the closest point to the center(source: https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line) and using
+    The hit-point is calculated by taking the closest point to the center(source: https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line) and using
     The Pythagoras theorem to calculate how far back you should travel on the ray to get to the edge of the Sphere. The triangle used in the Pythagoras
     theorem here is between the center, the closest point to the center on the ray, and the point you want to calculate. This brings the formula
     sqrt(radius^2 - distFromRay^2)

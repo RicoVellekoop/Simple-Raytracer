@@ -42,7 +42,7 @@ float Vec3D::norm()
 }
 
 Vec3D Vec3D::unit()
-{ //  devides vector by length of the vector to make a vector in the same direction, but with a length of 1
+{ //  divides vector by length of the vector to make a vector in the same direction, but with a length of 1
   return this->div(this->norm());
 }
 
