@@ -11,6 +11,7 @@
 typedef std::vector<Object *> VPO;
 
 #include "ray.h"
+#include "image.h"
 
 class RayScanner
 {
@@ -25,8 +26,6 @@ public:
 
     float normalizeYValue(int value);
 
-    void scan();
-
-    void renderImage(float rValue, float gValue, float bValue);
+    Image renderImage();
 };
 #endif
