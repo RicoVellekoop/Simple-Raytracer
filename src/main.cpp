@@ -23,7 +23,6 @@ int main()
   objects[2] = &s[2];
   objects[3] = &floor;
 
-  RayScanner(objects, 80, 40, 75).renderImage().showImage();
   RayScanner(objects, 1280, 720, 75).renderImage().saveImage("output.bmp");
   std::cout << "File saved as output.bmp" << std::endl;
   return 0;

@@ -4,8 +4,6 @@
 #include <fstream>
 #include "image.h"
 
-static const char asciiPallet[8] = {' ', '.', ',', '\"', '/', 'O', '8', '@'};
-
 #define BMP_HEADER_SIZE 54
 uint8_t *generateHeader(int width, int height)
 {
@@ -26,18 +24,6 @@ uint8_t *Image::toBytes()
     }
 
     return bytes;
-}
-
-char *Image::toAscii()
-{
-    char *ascii = new char[width * height];
-
-    for (int i = 0; i < width * height; i++)
-    {
-        ascii[i] = asciiPallet[(int)(pixels[i] * (sizeof asciiPallet / sizeof asciiPallet[0]))];
-    }
-
-    return ascii;
 }
 
 Image::Image(int width, int height)
@@ -76,19 +62,4 @@ void Image::saveImage(const char *filename)
     delete[] bytes;
     delete[] header;
     outputFile.close();
-}
-
-void Image::showImage()
-{
-    char *ascii = toAscii();
-
-    for (int y = 0; y < height; y++)
-    {
-        for (int x = 0; x < width; x++)
-        {
-            std::cout << ascii[y * width + x];
-            std::cout << ascii[y * width + x];
-        }
-        std::cout << std::endl;
-    }
 }
