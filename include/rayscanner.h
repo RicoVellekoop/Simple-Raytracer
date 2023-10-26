@@ -8,11 +8,12 @@
 
 #include "object.h"
 
-typedef std::vector<Object*> VPO;
+typedef std::vector<Object *> VPO;
 
 #include "ray.h"
 
-class RayScanner{
+class RayScanner
+{
 public:
     VPO objects;
     int xResolution, yResolution;
@@ -20,9 +21,9 @@ public:
 
     RayScanner(VPO &objects, float xResolution, float yResolution, float fovValue);
 
-    float normaliseXValue(int value);
+    float normalizeXValue(int value);
 
-    float normaliseYValue(int value);
+    float normalizeYValue(int value);
 
     void scan();
 

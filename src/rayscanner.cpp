@@ -8,27 +8,27 @@ RayScanner::RayScanner(VPO &objects, float xResolution, float yResolution, float
   fovScaler = 3 / tan((180 - fovValue) / 2 * 3.14159265358979323846 / 180.0); //  calculates how much the screen has to be scaled in order to reach the desired FOV
 }
 
-float RayScanner::normaliseXValue(int value)
-{ //  returns x coördinate on a scale from -1 to 1
+float RayScanner::normalizeXValue(int value)
+{ //  returns x coordinate on a scale from -1 to 1
   return ((value - xResolution / 2) / (float)xResolution) * 2;
 }
 
-float RayScanner::normaliseYValue(int value)
-{ //  returns x coördinate on a scale relative to the width of the screen
+float RayScanner::normalizeYValue(int value)
+{ //  returns x coordinate on a scale relative to the width of the screen
   return -((value - yResolution / 2) / (float)xResolution) * 2;
 }
 
 void RayScanner::scan()
-{ //  Prints the image in askii caracters in the console
-  static const char askii[8] = {' ', '.', ',', '\"', '/', 'O', '8', '@'};
+{ //  Prints the image in ascii characters in the console
+  static const char ascii[8] = {' ', '.', ',', '\"', '/', 'O', '8', '@'};
   for (int y = 0; y < yResolution; y++)
-  { //  these two loops loop trought all pixels
+  { //  these two loops loop trough all pixels
     for (int x = 0; x < xResolution; x++)
     {
-      float brightness = Ray(normaliseXValue(x) * fovScaler, normaliseYValue(y) * fovScaler, 1.0, objects).trace();
+      float brightness = Ray(normalizeXValue(x) * fovScaler, normalizeYValue(y) * fovScaler, 1.0, objects).trace();
       for (int charCount = 0; charCount < 2; charCount++)
       {
-        std::cout << askii[(int)(brightness * (sizeof askii / sizeof askii[0]))]; //  picks a caracter based on the brightness
+        std::cout << ascii[(int)(brightness * (sizeof ascii / sizeof ascii[0]))]; //  picks a character based on the brightness
       }
     }
     std::cout << std::endl; //  Adds a line ending on the end of all lines
@@ -59,7 +59,7 @@ void RayScanner::renderImage(float rValue, float gValue, float bValue)
   {
     for (int x = 0; x < xResolution; x++)
     {
-      float brightness = Ray(normaliseXValue(x) * fovScaler, -normaliseYValue(y) * fovScaler, 1.0, objects).trace();
+      float brightness = Ray(normalizeXValue(x) * fovScaler, -normalizeYValue(y) * fovScaler, 1.0, objects).trace();
       for (int rgb = 0; rgb < 3; rgb++)
       { // Writes the value 3 times because there are 3 color chanels
         switch (rgb)
