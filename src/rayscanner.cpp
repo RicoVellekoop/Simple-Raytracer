@@ -1,6 +1,9 @@
 #include "../include/rayscanner.h"
 #include "rayscanner.h"
 
+#include <thread>
+#include <vector>
+
 RayScanner::RayScanner(VPO &objects, float xResolution, float yResolution, float fovValue)
 {
   this->objects = objects;
@@ -19,17 +22,40 @@ float RayScanner::normalizeYValue(int value)
   return -((value - yResolution / 2) / (float)xResolution) * 2;
 }
 
+void processRows(int start, int end, RayScanner &scanner, Image &image)
+{
+  for (int y = start; y < end; y++)
+  {
+    for (int x = 0; x < scanner.xResolution; x++)
+    {
+      float brightness = Ray(scanner.normalizeXValue(x) * scanner.fovScaler, -scanner.normalizeYValue(y) * scanner.fovScaler, 1.0, scanner.objects).trace();
+      image.setPixel(x, y, brightness);
+    }
+  }
+}
+
 Image RayScanner::renderImage()
 {
   Image image = Image(xResolution, yResolution);
+  int numThreads = std::thread::hardware_concurrency();
 
-  for (int y = 0; y < yResolution; y++)
+  std::vector<std::thread> threads;
+  int rowsPerThread = yResolution / numThreads;
+  int start = 0;
+  int end = rowsPerThread;
+  for (int i = 0; i < numThreads; i++)
   {
-    for (int x = 0; x < xResolution; x++)
+    if (i == numThreads - 1)
     {
-      float brightness = Ray(normalizeXValue(x) * fovScaler, -normalizeYValue(y) * fovScaler, 1.0, objects).trace();
-      image.setPixel(x, y, brightness);
+      end = yResolution;
     }
+    threads.emplace_back(processRows, start, end, std::ref(*this), std::ref(image));
+    start = end;
+    end += rowsPerThread;
+  }
+  for (auto &thread : threads)
+  {
+    thread.join();
   }
 
   return image;
