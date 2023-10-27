@@ -7,14 +7,14 @@
 #include "vec3d.h"
 #include "object.h"
 
+typedef std::vector<Object *> VPO;
 
-typedef std::vector<Object*> VPO;
-
-class Ray{
-  public:
-    float brightness;
-    Vec3D supportVec, directionVec;
-    VPO objects;
+class Ray
+{
+public:
+  float brightness;
+  Vec3D supportVec, directionVec;
+  VPO objects;
 
   Ray(Vec3D supportVec, Vec3D directionVec, float brightness, VPO &objects);
 

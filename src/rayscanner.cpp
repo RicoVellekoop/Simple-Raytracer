@@ -1,12 +1,11 @@
 #include "../include/rayscanner.h"
-#include "rayscanner.h"
 
 #include <thread>
 #include <vector>
 
-RayScanner::RayScanner(VPO &objects, float xResolution, float yResolution, float fovValue)
+RayScanner::RayScanner(Scene &scene, float xResolution, float yResolution, float fovValue)
 {
-  this->objects = objects;
+  this->scene = scene;
   this->xResolution = xResolution;
   this->yResolution = yResolution;
   fovScaler = 3 / tan((180 - fovValue) / 2 * 3.14159265358979323846 / 180.0); //  calculates how much the screen has to be scaled in order to reach the desired FOV
@@ -28,7 +27,7 @@ void processRows(int start, int end, RayScanner &scanner, Image &image)
   {
     for (int x = 0; x < scanner.xResolution; x++)
     {
-      float brightness = Ray(scanner.normalizeXValue(x) * scanner.fovScaler, -scanner.normalizeYValue(y) * scanner.fovScaler, 1.0, scanner.objects).trace();
+      float brightness = Ray(scanner.normalizeXValue(x) * scanner.fovScaler, -scanner.normalizeYValue(y) * scanner.fovScaler, 1.0, scanner.scene.objects).trace();
       image.setPixel(x, y, brightness);
     }
   }

@@ -12,15 +12,16 @@ typedef std::vector<Object *> VPO;
 
 #include "ray.h"
 #include "image.h"
+#include "scene.h"
 
 class RayScanner
 {
 public:
-    VPO objects;
+    Scene scene;
     int xResolution, yResolution;
     float fovScaler;
 
-    RayScanner(VPO &objects, float xResolution, float yResolution, float fovValue);
+    RayScanner(Scene &scene, float xResolution, float yResolution, float fovValue);
 
     float normalizeXValue(int value);
 
