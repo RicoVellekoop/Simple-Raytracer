@@ -4,8 +4,32 @@ project(simple-raytracer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB SOURCES "src/*.cpp")
-file(GLOB HEADERS "include/*.h")
+# Add your source files here.
+set(SOURCES
+    src/main.cpp
+    src/vec3d.cpp
+    src/object.cpp
+    src/sphere.cpp
+    src/floor.cpp
+    src/scene.cpp
+    src/ray.cpp
+    src/rayscanner.cpp
+    src/image.cpp
+    src/command_line_interface.cpp
+    )
+
+# Add your header files here.
+set(HEADERS
+    include/vec3d.h
+    include/object.h
+    include/sphere.h
+    include/floor.h
+    include/scene.h
+    include/ray.h
+    include/rayscanner.h
+    include/image.h
+    include/command_line_interface.h
+    )
 
 add_executable(simple-raytracer ${SOURCES})
 
