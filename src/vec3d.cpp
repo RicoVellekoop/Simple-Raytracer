@@ -4,6 +4,13 @@
 //  3d vector class
 //  Note: this 3d vector uses x as width, y as hight, and z as depth
 
+Vec3D::Vec3D()
+{
+  this->x = 0;
+  this->y = 0;
+  this->z = 0;
+}
+
 Vec3D::Vec3D(float x, float y, float z)
 {
   this->x = x;
@@ -11,29 +18,79 @@ Vec3D::Vec3D(float x, float y, float z)
   this->z = z;
 }
 
-Vec3D Vec3D::minus()
+Vec3D Vec3D::operator+(Vec3D const &other)
 {
-  return Vec3D(-this->x, -this->y, -this->z);
+  return Vec3D(x + other.x, y + other.y, z + other.z);
 }
 
-Vec3D Vec3D::add(Vec3D const &other)
+Vec3D Vec3D::operator-(Vec3D const &other)
 {
-  return Vec3D(this->x + other.x, this->y + other.y, this->z + other.z);
+  return Vec3D(x - other.x, y - other.y, z - other.z);
 }
 
-Vec3D Vec3D::sub(Vec3D const &other)
+Vec3D Vec3D::operator-()
 {
-  return Vec3D(this->x - other.x, this->y - other.y, this->z - other.z);
+  return Vec3D(-x, -y, -z);
 }
 
-Vec3D Vec3D::mul(float scalar)
+Vec3D Vec3D::operator*(float scalar)
 {
-  return Vec3D(this->x * scalar, this->y * scalar, this->z * scalar);
+  return Vec3D(x * scalar, y * scalar, z * scalar);
 }
 
-Vec3D Vec3D::div(float scalar)
+Vec3D Vec3D::operator/(float scalar)
 {
-  return Vec3D(this->x / scalar, this->y / scalar, this->z / scalar);
+  return Vec3D(x / scalar, y / scalar, z / scalar);
+}
+
+Vec3D Vec3D::operator*(Vec3D const &other)
+{
+  return Vec3D(x * other.x, y * other.y, z * other.z);
+}
+
+Vec3D Vec3D::operator/(Vec3D const &other)
+{
+  return Vec3D(x / other.x, y / other.y, z / other.z);
+}
+
+Vec3D Vec3D::operator+=(Vec3D const &other)
+{
+  return *this = *this + other;
+}
+
+Vec3D Vec3D::operator-=(Vec3D const &other)
+{
+  return *this = *this - other;
+}
+
+Vec3D Vec3D::operator*=(float scalar)
+{
+  return *this = *this * scalar;
+}
+
+Vec3D Vec3D::operator/=(float scalar)
+{
+  return *this = *this / scalar;
+}
+
+Vec3D Vec3D::operator*=(Vec3D const &other)
+{
+  return *this = *this * other;
+}
+
+Vec3D Vec3D::operator/=(Vec3D const &other)
+{
+  return *this = *this / other;
+}
+
+bool Vec3D::operator==(Vec3D const &other)
+{
+  return this->x == other.x && this->y == other.y && this->z == other.z;
+}
+
+bool Vec3D::operator!=(Vec3D const &other)
+{
+  return this->x != other.x || this->y != other.y || this->z != other.z;
 }
 
 float Vec3D::norm()
@@ -43,7 +100,8 @@ float Vec3D::norm()
 
 Vec3D Vec3D::unit()
 { //  divides vector by length of the vector to make a vector in the same direction, but with a length of 1
-  return this->div(this->norm());
+  float length = this->norm();
+  return Vec3D(this->x / length, this->y / length, this->z / length);
 }
 
 float Vec3D::dot(Vec3D const &other)

@@ -55,5 +55,5 @@ Vec3D Ray::getDirVec() const
 Vec3D Ray::reflect(Vec3D normalVec) const
 { //  mirrors a directionVec in a vector which is perpendicular to the surface of the object
   //  source: https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/reflect.xhtml
-  return this->getDirVec().sub(normalVec.mul(2.0 * this->getDirVec().dot(normalVec)));
+  return this->getDirVec() - normalVec * (2.0 * this->getDirVec().dot(normalVec));
 }

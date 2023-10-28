@@ -19,13 +19,7 @@ float Sphere::distFromRay(Ray const &ray) const
 {
   //  source: https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
 
-  return this->getCenter()
-      .sub(ray.getSupVec())
-      .sub(ray.getDirVec()
-               .mul(this->getCenter()
-                        .sub(ray.getSupVec())
-                        .dot(ray.getDirVec())))
-      .norm();
+  return (this->getCenter() - ray.getSupVec() - ray.getDirVec() * ((this->getCenter() - ray.getSupVec()).dot(ray.getDirVec()))).norm();
 }
 
 bool Sphere::hit(class Ray &ray) const
@@ -36,7 +30,7 @@ bool Sphere::hit(class Ray &ray) const
   }
   if (this->distFromRay(ray) < radius)
   {
-    if (this->hitPoint(ray).sub(ray.getSupVec()).dot(ray.getDirVec()) > 0)
+    if ((this->hitPoint(ray) - ray.getSupVec()).dot(ray.getDirVec()) > 0)
     { //  Check if Sphere is behind the ray
       return true;
     }
@@ -62,16 +56,11 @@ Vec3D Sphere::hitPoint(class Ray &ray) const
 
   float backtrackDistance = sqrt(pow(this->radius, 2) - pow(this->distFromRay(ray), 2));
 
-  return this->getCenter().add(ray.getSupVec()
-                                   .sub(this->getCenter())
-                                   .sub(ray.getDirVec()
-                                            .mul(ray.getSupVec()
-                                                     .sub(this->getCenter())
-                                                     .dot(ray.getDirVec()))) // closest point on the ray to the center
-                                   .sub(ray.getDirVec().mul(backtrackDistance)));
+  return this->getCenter() + (ray.getSupVec() - this->getCenter() - ray.getDirVec() * (ray.getSupVec() - this->getCenter()).dot(ray.getDirVec()) // closest point on the ray to the center
+                              - ray.getDirVec() * backtrackDistance);
 }
 
 Vec3D Sphere::getNormalVector(class Ray &ray) const
 { //  this returns a vector perpendicular to the surface on the sphere where it hits the circle
-  return this->hitPoint(ray).sub(this->getCenter()).unit();
+  return (this->hitPoint(ray) - this->getCenter()).unit();
 }

@@ -14,7 +14,7 @@ bool Floor::hit(class Ray &ray) const
   { //  returns false if the ray travels upwards
     return false;
   }
-  Vec3D hitPoint = ray.getSupVec().add(ray.getDirVec().mul(rayDistance)).sub(this->getCenter()); //  travels the rayDistance on the ray to reach the floor.
+  Vec3D hitPoint = ray.getSupVec() + ray.getDirVec() * rayDistance - this->getCenter(); //  travels the rayDistance on the ray to reach the floor.
 
   if (abs(hitPoint.x) > length / 2 || abs(hitPoint.z) > width / 2)
   { //  returns false if the hitPoint is not on the floor
@@ -31,7 +31,7 @@ bool Floor::hit(class Ray &ray) const
 Vec3D Floor::hitPoint(class Ray &ray) const
 { //  calculates how far the ray has to travel before hitting the floor
   float rayDistance = (center.y - ray.getSupVec().y) / ray.getDirVec().y;
-  return ray.getSupVec().add(ray.getDirVec().mul(rayDistance));
+  return ray.getSupVec() + ray.getDirVec() * rayDistance;
 }
 
 Vec3D Floor::getNormalVector(class Ray &ray) const
