@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <fstream>
-#include "image.h"
 
 #define BMP_HEADER_SIZE 54
 uint8_t *generateHeader(int width, int height)
@@ -18,9 +17,9 @@ uint8_t *Image::toBytes()
 
     for (int i = 0; i < width * height; i++)
     {
-        bytes[i * 3] = (uint8_t)(pixels[i] * 255);
-        bytes[i * 3 + 1] = (uint8_t)(pixels[i] * 255);
-        bytes[i * 3 + 2] = (uint8_t)(pixels[i] * 255);
+        bytes[i * 3] = (uint8_t)(pixels[i].r * 255);
+        bytes[i * 3 + 1] = (uint8_t)(pixels[i].g * 255);
+        bytes[i * 3 + 2] = (uint8_t)(pixels[i].b * 255);
     }
 
     return bytes;
@@ -30,12 +29,17 @@ Image::Image(int width, int height)
 {
     this->width = width;
     this->height = height;
-    pixels = new float[width * height];
+    pixels = new Color[width * height];
 }
 
 void Image::setPixel(int x, int y, float value)
 {
-    pixels[y * width + x] = value;
+    pixels[y * width + x] = Color(value, value, value);
+}
+
+void Image::setPixel(int x, int y, Color color)
+{
+    pixels[y * width + x] = color;
 }
 
 void Image::saveImage(const char *filename)
