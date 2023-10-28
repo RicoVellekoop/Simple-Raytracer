@@ -16,6 +16,7 @@ class CommandLineInterface
 {
 public:
     std::map<std::string, void (CommandLineInterface::*)(const std::string &)> commandMap{
+        {"add", &CommandLineInterface::processAddObject},
     };
     Scene &scene;
     RayScanner &rayScanner;
@@ -24,7 +25,10 @@ public:
     void run();
 
 private:
+    std::vector<float> parseFloatArguments(const std::vector<std::string> &arguments);
+
     void processInput(const std::string &input);
+    void processAddObject(const std::string &input);
 };
 
 #endif
