@@ -17,9 +17,9 @@ uint8_t *Image::toBytes()
 
     for (int i = 0; i < width * height; i++)
     {
-        bytes[i * 3] = (uint8_t)(pixels[i].r * 255);
+        bytes[i * 3] = (uint8_t)(pixels[i].b * 255);
         bytes[i * 3 + 1] = (uint8_t)(pixels[i].g * 255);
-        bytes[i * 3 + 2] = (uint8_t)(pixels[i].b * 255);
+        bytes[i * 3 + 2] = (uint8_t)(pixels[i].r * 255);
     }
 
     return bytes;
