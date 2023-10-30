@@ -28,8 +28,8 @@ void processRows(int start, int end, RayScanner &scanner, Image &image)
   {
     for (int x = 0; x < scanner.xResolution; x++)
     {
-      float brightness = Ray(scanner.normalizeXValue(x) * scanner.fovScaler, -scanner.normalizeYValue(y) * scanner.fovScaler, 1.0, scanner.objects).trace();
-      image.setPixel(x, y, brightness);
+      Color c = Ray(scanner.normalizeXValue(x) * scanner.fovScaler, -scanner.normalizeYValue(y) * scanner.fovScaler, Color(1.0, 1.0, 1.0), scanner.objects).trace(0);
+      image.setPixel(x, y, c);
     }
   }
 }

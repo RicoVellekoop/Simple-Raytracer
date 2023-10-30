@@ -16,8 +16,9 @@ typedef std::vector<Object *> VPO;
 int main()
 {
   VPO objects(4, NULL);
-  Sphere s[3] = {Sphere(-0.4, 0.23, -1, 0.4), Sphere(0.4, 0.4, -1.2, 0.3), Sphere(0.7, -0.15, -1.5, 0.2)};
-  Floor floor = Floor(0, -0.7, -2.3, 5, 5, 0.4);
+  Sphere s[3] = {Sphere(-0.4, 0.23, -1, 0.4, new Material(new SolidColor(1.0, 0.0, 0.0))), Sphere(0.4, 0.4, -1.2, 0.3, new Material(new SolidColor(0.0, 1.0, 0.0))), Sphere(0.7, -0.15, -1.5, 0.2, new Material(new SolidColor(0.0, 0.0, 1.0)))};
+  Floor floor = Floor(0, -0.7, -2.3, 5, 5, new Material(new CheckerTexture(Color(0.94, 0.13, 0.90), Color(0.58, 0.94, 0.13), 4.0)));
+
   objects[0] = &s[0];
   objects[1] = &s[1];
   objects[2] = &s[2];
