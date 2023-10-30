@@ -2,6 +2,7 @@
 #define H_IMAGE
 
 #include "color.h"
+#include "texture.h"
 
 #include <cstdint>
 
@@ -20,6 +21,8 @@ public:
 
     void saveImage(const char *filename);
     void showImage();
+
+    void loadTexture(const Texture *tex);
 };
 
 #endif

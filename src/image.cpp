@@ -67,3 +67,16 @@ void Image::saveImage(const char *filename)
     delete[] header;
     outputFile.close();
 }
+
+void Image::loadTexture(const Texture *tex)
+{
+    for (int y = 0; y < height; y++)
+    {
+        float v = (float)y / (float)height;
+        for (int x = 0; x < width; x++)
+        {
+            float u = (float)x / (float)width;
+            setPixel(x, y, tex->value(u, v));
+        }
+    }
+}
