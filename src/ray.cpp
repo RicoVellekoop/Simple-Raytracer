@@ -1,4 +1,5 @@
 #include "../include/ray.h"
+#include <mutex>
 
 //  This constructor uses 2 Vec3D objects instead of the 6 floats in the assignment because it is easier to work with
 Ray::Ray(Vec3D supportVec, Vec3D directionVec, Color color, VPO &objects) : supportVec(supportVec), directionVec(directionVec)
@@ -22,21 +23,25 @@ Color Ray::trace(int depth)
   { // Stops a ray when it has already reflected 4 times
     return color;
   }
+  HitInfo closestHit = HitInfo();
+
   for (Object *obj : objects)
   {
-    if (obj->hit(*this))
+    HitInfo hit = obj->hit(*this);
+    if (hit.hit && (!closestHit.hit || hit.distance < closestHit.distance))
     {
-      if (obj->getType() == "Sphere")
-      {
-        return color * 0.4 + Ray(obj->hitPoint(*this), this->reflect(obj->getNormalVector(*this)), color * 0.6, objects).trace(depth + 1);
-      }
-      else if (obj->getType() == "Floor")
-      {
-        return color;
-      }
+      closestHit = hit;
     }
-    else
+  }
+  if (closestHit.hit)
+  {
+    if (closestHit.object->getType() == "Sphere")
     {
+      return closestHit.object->getColor(closestHit) * 0.4 + Ray(closestHit.hitPoint, this->reflect(closestHit.normalVector), color * 0.6, objects).trace(depth + 1);
+    }
+    else if (closestHit.object->getType() == "Floor")
+    {
+      return closestHit.object->getColor(closestHit);
     }
   }
   return Color(0, 0, 0);

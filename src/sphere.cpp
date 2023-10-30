@@ -1,6 +1,6 @@
 #include "../include/sphere.h"
 
-Sphere::Sphere(float x, float y, float z, float radius) : Object(x, y, z)
+Sphere::Sphere(float x, float y, float z, float radius, Material *m) : Object(x, y, z, m)
 {
   this->radius = radius;
 }
@@ -22,27 +22,16 @@ float Sphere::distFromRay(Ray const &ray) const
   return (this->getCenter() - ray.getSupVec() - ray.getDirVec() * ((this->getCenter() - ray.getSupVec()).dot(ray.getDirVec()))).norm();
 }
 
-bool Sphere::hit(class Ray &ray) const
+HitInfo Sphere::hit(class Ray &ray) const
 {
-  if (this->hitPoint(ray).distToPoint(ray.getSupVec()) < 0.0001)
-  { //  this is here to make sure the reflected ray wont reflect on the same Sphere
-    return false;
+  Vec3D hitPoint = this->hitPoint(ray);
+  float distance = hitPoint.distToPoint(ray.getSupVec());
+
+  if (this->distFromRay(ray) < radius && (hitPoint - ray.getSupVec()).dot(ray.getDirVec()) > 0 && distance > 0.0001)
+  { //  Check if Sphere is behind the ray and if the distance is not 0
+    return HitInfo(hitPoint, this->getNormalVector(ray), hitPoint.distToPoint(ray.getSupVec()), (Object *)this);
   }
-  if (this->distFromRay(ray) < radius)
-  {
-    if ((this->hitPoint(ray) - ray.getSupVec()).dot(ray.getDirVec()) > 0)
-    { //  Check if Sphere is behind the ray
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
-  else
-  {
-    return false;
-  }
+  return HitInfo();
 }
 
 Vec3D Sphere::hitPoint(class Ray &ray) const
@@ -63,4 +52,12 @@ Vec3D Sphere::hitPoint(class Ray &ray) const
 Vec3D Sphere::getNormalVector(class Ray &ray) const
 { //  this returns a vector perpendicular to the surface on the sphere where it hits the circle
   return (this->hitPoint(ray) - this->getCenter()).unit();
+}
+
+Color Sphere::getColor(HitInfo const &hitInfo) const
+{
+  float u = 0.5 + atan2(hitInfo.hitPoint.z - center.z, hitInfo.hitPoint.x - center.x) / (2 * M_PI);
+  float v = 0.5 - asin(hitInfo.hitPoint.y - center.y) / M_PI;
+
+  return material->texture->value(u, v);
 }

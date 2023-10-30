@@ -20,7 +20,9 @@ public:
   Vec3D getCenter() const;
   std::string getType();
   float distFromRay(Ray const &ray) const;
+  HitInfo hit(class Ray &ray) const;
   Vec3D hitPoint(class Ray &ray) const;
   Vec3D getNormalVector(class Ray &ray) const;
+  Color getColor(HitInfo const &hitInfo) const override;
 };
 #endif

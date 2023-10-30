@@ -1,31 +1,25 @@
 #include "../include/floor.h"
 
-Floor::Floor(float x, float y, float z, float length, float width, float checkerDistance) : Object(x, y, z)
+Floor::Floor(float x, float y, float z, float length, float width, Material *m) : Object(x, y, z, m)
 {
   this->length = length;
   this->width = width;
-  this->checkerDistance = checkerDistance;
 }
 
-bool Floor::hit(class Ray &ray) const
+HitInfo Floor::hit(class Ray &ray) const
 {
   float rayDistance = (center.y - ray.getSupVec().y) / ray.getDirVec().y; //  calculates how far the ray has to travel before hitting the floor
   if (rayDistance < 0)
   { //  returns false if the ray travels upwards
-    return false;
+    return HitInfo();
   }
-  Vec3D hitPoint = ray.getSupVec() + ray.getDirVec() * rayDistance - this->getCenter(); //  travels the rayDistance on the ray to reach the floor.
+  Vec3D hitPoint = ray.getSupVec() + ray.getDirVec() * rayDistance; //  travels the rayDistance on the ray to reach the floor.
 
-  if (abs(hitPoint.x) > length / 2 || abs(hitPoint.z) > width / 2)
-  { //  returns false if the hitPoint is not on the floor
-    return false;
-  }
-
-  bool xOffset = (hitPoint.x < 0); //  this is used to remove a duplicate row on the place where the x coordinate goes below 0
-  bool zOffset = (hitPoint.z < 0); //  this is used to remove a duplicate row on the place where the z coordinate goes below 0
-
-  //  calculates which what square the ray hits counted from the middle. if the X and Z coordinates of that square are either both even or both uneven this will return true
-  return (int)(abs(hitPoint.x - xOffset * checkerDistance) / checkerDistance) % 2 == (int)((abs(hitPoint.z - zOffset * checkerDistance)) / checkerDistance) % 2;
+  if (abs(hitPoint.x - center.x) < length / 2 && abs(hitPoint.z - center.z) < width / 2)
+  {
+    return HitInfo(hitPoint, this->getNormalVector(ray), rayDistance, (Object *)this);
+  };
+  return HitInfo();
 }
 
 Vec3D Floor::hitPoint(class Ray &ray) const
@@ -47,4 +41,12 @@ Vec3D Floor::getCenter() const
 std::string Floor::getType()
 { //  Used to be able to know what object a ray has hit
   return "Floor";
+}
+
+Color Floor::getColor(HitInfo const &hitInfo) const
+{
+  float u = (hitInfo.hitPoint.x - center.x + length / 2) / length;
+  float v = (hitInfo.hitPoint.z - center.z + width / 2) / width;
+
+  return material->texture->value(u, v);
 }
