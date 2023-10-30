@@ -5,22 +5,14 @@
 #include "object.h"
 #include "ray.h"
 
-
-class Floor : public Object{
-  public:
-    float length, width, checkerDistance;
-
-  Floor(float x, float y, float z, float length, float width, float checkerDistance);
-
-
-  bool hit (class Ray &ray) const;
-
+class Floor : public Object
+{
+public:
+  float length, width;
+  Floor(float x, float y, float z, float length, float width, Material *m);
   Vec3D hitPoint(class Ray &ray) const;
-
   Vec3D getNormalVector(class Ray &ray) const;
-
   Vec3D getCenter() const;
-
   std::string getType();
 };
 #endif

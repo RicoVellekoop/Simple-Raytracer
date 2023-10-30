@@ -14,3 +14,7 @@ HitInfo::HitInfo()
     this->hit = false;
 }
 
+Object::Object(float x, float y, float z, Material *m) : center(x, y, z)
+{
+    material = m;
+}
