@@ -3,6 +3,20 @@
 
 #include <iostream>
 #include "vec3d.h"
+class Object;
+
+class HitInfo
+{
+public:
+  Vec3D hitPoint;
+  Vec3D normalVector;
+  float distance;
+  Object *object;
+  bool hit;
+
+  HitInfo(Vec3D hitPoint, Vec3D normalVector, float distance, Object *object);
+  HitInfo();
+};
 
 class Object{
   public:
